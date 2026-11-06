@@ -1,0 +1,17 @@
+# 默认按文本处理，统一 LF
+* text=auto eol=lf
+
+# Windows 脚本要 CRLF，否则在某些环境下会有诡异问题
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Shell 脚本与 gradlew 必须 LF
+*.sh text eol=lf
+gradlew text eol=lf
+
+# 二进制
+*.jar binary
+*.zip binary
+*.png binary
+*.ogg binary
+*.nbt binary

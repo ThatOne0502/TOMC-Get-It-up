@@ -1,0 +1,49 @@
+# Gradle
+.gradle/
+build/
+out/
+classes/
+!gradle/wrapper/gradle-wrapper.jar
+
+# 本机构建计数：每次成功构建自增，不该进版本库
+build-count.txt
+
+# 运行目录与日志
+run/
+logs/
+crash-reports/
+.fabric/
+
+# 构建产物（dist/ 是本地收集的成品）
+*.jar
+*.zip
+!**/gradle/wrapper/gradle-wrapper.jar
+dist/
+
+# 本机备份、临时文件、研究取样
+backup/
+temp/
+temp*/
+.research/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+bin/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 日志
+*.log
+
+# 工作笔记（留在本地）
+notes/

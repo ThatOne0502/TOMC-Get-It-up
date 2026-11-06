@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "io.github.thatone0502.getitup.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "BlockStateBaseMixin",
+    "SlabBlockMixin",
+    "StairBlockMixin",
+    "StateDefinitionBuilderMixin"
+  ],
+  "client": [
+    "BlockStateModelSetMixin",
+    "BlockStateModelWrapperMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

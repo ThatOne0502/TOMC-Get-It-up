@@ -1,0 +1,34 @@
+# 26.x 同 21.x 形态：无加载器声明字段（走默认 javafml）；license 必填。
+license="${mod_license}"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version_full}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+# 本文件会先过一遍 processResources 的模板展开，反斜杠在那层就会被解开，
+# 所以换行要写成「双反斜杠 + n」；注释里也不要出现反斜杠转义。
+description="We can finally get it up whenever and wherever we want - no wife required.\\n\\nDevelopment assisted by DeepSeek Harness(deepseek-flash)."
+logoFile="assets/getitup/logo.png"
+logoBlur=false
+
+[[dependencies.${mod_id}]]
+modId="neoforge"
+versionRange="${neo_version_range}"
+mandatory=true
+
+[[dependencies.${mod_id}]]
+modId="minecraft"
+versionRange="${minecraft_version_range}"
+mandatory=true
+
+# 可选前置：只有客户端需要它来显示配置页；没装时游戏照常，配置退回手写 json。
+[[dependencies.${mod_id}]]
+modId="cloth_config"
+type="optional"
+versionRange="[${cloth_config_version},)"
+ordering="NONE"
+side="CLIENT"
+
+[[mixins]]
+config="getitup.mixins.json"

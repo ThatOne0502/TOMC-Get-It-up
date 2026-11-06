@@ -1,0 +1,83 @@
+plugins {
+	id 'java-library'
+	id 'maven-publish'
+	id 'net.neoforged.moddev' version '2.0.144'
+	id 'idea'
+}
+
+// ---- 产物命名：tomc-getitup-<主>.<次>.<修>.<构建次数>-neoforge+mc<mc版本>.jar ----
+// 每成功跑一次 jar/assemble，就把 build-count.txt 累加 1；本次产物使用累加前的数字。
+def buildCount = file('build-count.txt').text.trim().toInteger()
+ext.mod_version_full = "${mod_version}.${buildCount}"
+
+version = "${mod_version_full}-neoforge+mc${minecraft_version}"
+group = mod_group_id
+
+base {
+	archivesName = "tomc-${mod_id}"
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
+
+java {
+	withSourcesJar()
+}
+
+neoForge {
+	version = project.neo_version
+
+	runs {
+		client {
+			client()
+		}
+		server {
+			server()
+			programArgument '--nogui'
+		}
+		data {
+			data()
+		}
+	}
+
+	mods {
+		"${mod_id}-neoforge" {
+			sourceSet sourceSets.main
+		}
+	}
+}
+
+repositories {
+	// Cloth Config：只在编译期引一下，运行期由玩家自行决定装不装。
+	maven {
+		name = 'shedaniel'
+		url = 'https://maven.shedaniel.me/'
+	}
+}
+
+dependencies {
+	compileOnly "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}"
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+}
+
+// 只展开 toml 里的 ${...}，二进制资源（png）绝不能过 expand。
+// 两个坑：
+//  1. expand 走的是 Groovy 模板，会把反斜杠转义解开 —— toml 里要写换行得写「双反斜杠 + n」，否则生成的
+//     toml 里会出现真换行，TOML 解析直接失败（`Invalid newline in basic string`）。
+//  2. 版本号来自 build-count.txt，不是文件输入；不加 inputs.property 的话，只要 toml 本身没改动，
+//     打进 jar 的 toml 就会停在很久以前那个版本号，与 jar 名对不上。
+processResources {
+	filteringCharset = 'UTF-8'
+	inputs.property('mod_version_full', mod_version_full)
+	filesMatching('META-INF/neoforge.mods.toml') {
+		expand project.properties
+	}
+}
+
+tasks.named('jar', Jar).configure {
+	doFirst {
+		file('build-count.txt').text = (buildCount + 1).toString()
+	}
+}
